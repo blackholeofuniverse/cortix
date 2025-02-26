@@ -15,7 +15,7 @@ export default function ChatInterface() {
   const [inputMessage, setInputMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const chatContainerRef = useRef(null);
-  const { currentChat, setCurrentChat, saveChat } = useChatContext();
+  const { currentChat, setCurrentChat } = useChatContext();
   const inputRef = useRef(null);
 
   // Auto-scroll to bottom when messages change
@@ -73,8 +73,8 @@ export default function ChatInterface() {
       const updatedChat = [...currentChat, userMessage, aiMessage];
       setCurrentChat(updatedChat);
 
-      // Save to history
-      saveChat(updatedChat);
+      // Update chat state
+      // No need to save to history anymore
     } catch (error) {
       console.error("Error sending message:", error);
 
@@ -103,7 +103,7 @@ export default function ChatInterface() {
               <Card className="text-center p-6 max-w-md">
                 <CardContent className="pt-6">
                   <h2 className="text-2xl font-bold mb-2">
-                    Welcome to Gemini Chat
+                    Welcome to Cortix
                   </h2>
                   <p className="text-muted-foreground">
                     Ask me anything, and I'll do my best to help you find

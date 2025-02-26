@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import ChatInterface from '../components/ChatInterface';
-import ChatHistory from '../components/ChatHistory';
 import { MessageSquare, Plus } from 'lucide-react';
 import { ChatProvider } from './context/ChatContext';
 import { Button } from '../components/ui/button';
@@ -27,8 +26,7 @@ export default function Home() {
                 New Chat
               </Button>
 
-              <h2 className="text-lg font-semibold mb-3 text-foreground">Chat History</h2>
-              <ChatHistory />
+
             </div>
           </ScrollArea>
         </div>
@@ -45,7 +43,7 @@ export default function Home() {
             >
               <MessageSquare className="w-5 h-5" />
             </Button>
-            <h1 className="text-xl font-bold">Gemini Chat</h1>
+            <h1 className="text-xl font-bold">Cortix</h1>
             <div className="w-5 md:hidden">
               {/* Spacer for mobile layout */}
             </div>

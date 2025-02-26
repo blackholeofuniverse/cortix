@@ -5,8 +5,8 @@ import { ThemeProvider } from '../components/theme-provider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Gemini Chat',
-  description: 'Chat with Gemini AI',
+  title: 'Cortix',
+  description: 'Chat with Cortix',
 };
 
 export default function RootLayout({ children }) {
