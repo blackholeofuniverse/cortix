@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send } from "lucide-react";
+import { Send, Search } from "lucide-react";
 import ChatMessage from "./ChatMessage";
 import { useChatContext } from "../app/context/ChatContext";
 import { Input } from "./ui/input";
@@ -9,7 +9,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { ScrollArea } from "./ui/scroll-area";
 import { Skeleton } from "./ui/skeleton";
-import { Bot } from 'lucide-react';
+import { Bot } from "lucide-react";
 
 export default function ChatInterface() {
   const [inputMessage, setInputMessage] = useState("");
@@ -17,6 +17,27 @@ export default function ChatInterface() {
   const chatContainerRef = useRef(null);
   const { currentChat, setCurrentChat } = useChatContext();
   const inputRef = useRef(null);
+  const [typingText, setTypingText] = useState("");
+  const welcomeMessage = "How can I help you today?";
+
+  useEffect(() => {
+    if (currentChat.length === 0) {
+      let currentIndex = 0;
+      const typingInterval = setInterval(() => {
+        if (currentIndex <= welcomeMessage.length) {
+          setTypingText(welcomeMessage.slice(0, currentIndex));
+          currentIndex++;
+        } else {
+          setTimeout(() => {
+            currentIndex = 0;
+            setTypingText("");
+          }, 2000);
+        }
+      }, 50);
+
+      return () => clearInterval(typingInterval);
+    }
+  }, [currentChat.length]);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -99,18 +120,12 @@ export default function ChatInterface() {
       <ScrollArea ref={chatContainerRef} className="flex-1 p-4">
         <div className="space-y-4 pb-4">
           {currentChat.length === 0 ? (
-            <div className="flex items-center justify-center h-64">
-              <Card className="text-center p-6 max-w-md">
-                <CardContent className="pt-6">
-                  <h2 className="text-2xl font-bold mb-2">
-                    Welcome to Cortix
-                  </h2>
-                  <p className="text-muted-foreground">
-                    Ask me anything, and I'll do my best to help you find
-                    answers.
-                  </p>
-                </CardContent>
-              </Card>
+            <div className="flex flex-col items-center justify-center h-[80vh] space-y-4">
+              <Bot className="w-8 h-8 text-white" />
+              <h2 className="text-2xl font-semibold">Hi, I'm Cortix!</h2>
+              <p className="text-muted-foreground h-6 overflow-hidden">
+                {typingText}
+              </p>
             </div>
           ) : (
             currentChat.map((message, index) => (
@@ -135,27 +150,31 @@ export default function ChatInterface() {
 
       {/* Input area */}
       <div className="border-t border-border p-4 bg-background">
-        <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-          <Input
-            ref={inputRef}
-            type="text"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="Type your message..."
-            className="flex-1"
-            disabled={isLoading}
-          />
-          <Button
-            type="submit"
-            disabled={isLoading || !inputMessage.trim()}
-            variant={
-              isLoading || !inputMessage.trim() ? "secondary" : "default"
-            }
-            size="icon"
-          >
-            <Send className="w-5 h-5" />
-          </Button>
+        <form onSubmit={handleSendMessage} className="max-w-3xl mx-auto">
+          <div className="relative flex items-center gap-2 bg-card rounded-lg p-2 border border-border">
+            <Input
+              ref={inputRef}
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              placeholder="Message Cortix..."
+              className="flex-1 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+              disabled={isLoading}
+            />
+            <Button
+              type="submit"
+              disabled={isLoading || !inputMessage.trim()}
+              variant={isLoading || !inputMessage.trim() ? "ghost" : "default"}
+              size="icon"
+              className="shrink-0"
+            >
+              <Send className="w-4 h-4" />
+            </Button>
+          </div>
         </form>
+        <div className="text-xs text-muted-foreground text-center mt-2 font-mono">
+          Made By Samrat🤍
+        </div>
       </div>
     </div>
   );
